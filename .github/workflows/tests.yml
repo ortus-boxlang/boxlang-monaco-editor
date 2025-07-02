@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16, 18, 20]
+        node-version: [20, 22]
 
     steps:
       - name: Checkout code
@@ -91,7 +91,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
 
           if [ "${{ needs.test.result }}" == "success" ]; then
-            echo "✅ **Tests**: All tests, linting, and builds passed across Node.js versions 16, 18, 20" >> $GITHUB_STEP_SUMMARY
+            echo "✅ **Tests**: All tests, linting, and builds passed across Node.js versions 20, 22" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ **Tests**: Tests, linting, or build failed" >> $GITHUB_STEP_SUMMARY
           fi
@@ -103,4 +103,4 @@ jobs:
           fi
 
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Node.js versions tested**: 16, 18, 20" >> $GITHUB_STEP_SUMMARY
+          echo "**Node.js versions tested**: 20, 22" >> $GITHUB_STEP_SUMMARY

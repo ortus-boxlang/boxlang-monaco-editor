@@ -66,6 +66,6 @@
   },
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=20.19.0"
   }
 }

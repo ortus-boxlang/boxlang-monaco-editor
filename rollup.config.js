@@ -30,7 +30,7 @@ export default [
 			file      : "dist/index.js",
 			format    : "cjs",
 			sourcemap : true,
-			exports   : "auto"
+			exports   : "named"
 		},
 		external : [ "monaco-editor" ],
 		plugins  : [
@@ -47,6 +47,7 @@ export default [
 			format    : "umd",
 			name      : "BoxLangMonaco",
 			sourcemap : true,
+			exports   : "named",
 			globals   : { "monaco-editor": "monaco" }
 		},
 		external : [ "monaco-editor" ],
