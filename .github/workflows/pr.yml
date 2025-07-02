@@ -24,7 +24,7 @@ jobs:
           if [ "${{ needs.tests.result }}" == "success" ]; then
             echo "✅ **All tests passed!**" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "- 📦 Tests completed successfully across Node.js versions 16, 18, and 20" >> $GITHUB_STEP_SUMMARY
+            echo "- 📦 Tests completed successfully across Node.js versions  20, 22" >> $GITHUB_STEP_SUMMARY
             echo "- 🔍 Code quality checks passed" >> $GITHUB_STEP_SUMMARY
             echo "- 🔒 Security audit completed" >> $GITHUB_STEP_SUMMARY
             echo "- 🏗️ Build artifacts verified" >> $GITHUB_STEP_SUMMARY
