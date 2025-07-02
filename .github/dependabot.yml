@@ -6,13 +6,7 @@ updates:
     schedule:
       interval: "weekly"
 
-  # Gradle - updates dependencies in build.gradle or build.gradle.kts
-  - package-ecosystem: "gradle"
-    directory: "/"                  # Adjust if build.gradle is in a subfolder
-    schedule:
-      interval: "weekly"
-
   - package-ecosystem: "npm"
-    directory: "/frontend"  # adjust if needed
+    directory: "/"  # adjust if needed
     schedule:
       interval: "weekly"
