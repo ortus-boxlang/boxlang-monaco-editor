@@ -7,6 +7,33 @@ Built with [Vite](https://vitejs.dev/) for fast development and optimized produc
 [![npm version](https://badge.fury.io/js/boxlang-monaco-editor.svg)](https://www.npmjs.com/package/boxlang-monaco-editor)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
+## Table of Contents
+
+- [Screenshots](#screenshots)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Features](#features)
+- [API Reference](#api-reference)
+- [Development](#development)
+- [File Structure](#file-structure)
+- [Integration Guide](#integration-guide)
+- [Supported Features](#supported-features)
+- [Customization](#customization)
+- [Contributing](#contributing)
+- [Browser Support](#browser-support)
+- [Changelog](#changelog)
+- [License](#license)
+
+## Screenshots
+
+### BoxLang Script Syntax Highlighting
+
+![BoxLang Script Editor](boxlang-monaco-script.png)
+
+### BoxLang Template Syntax Highlighting
+
+![BoxLang Template Editor](boxlang-monaco-templating.png)
+
 ## Installation
 
 ```bash
@@ -39,12 +66,81 @@ const editor = createBoxLangEditor(document.getElementById('editor'), {
 - **Code Folding**: Intelligent folding for functions, classes, and blocks
 - **Bracket Matching**: Automatic bracket and quote pairing
 
+## API Reference
+
+### Core Functions
+
+#### `initializeBoxLangSupport()`
+Initializes BoxLang language support in Monaco Editor. This registers the language, sets up syntax highlighting, and applies the theme.
+
+```javascript
+import { initializeBoxLangSupport } from 'boxlang-monaco-editor';
+initializeBoxLangSupport();
+```
+
+#### `createBoxLangEditor(container, options)`
+Creates a Monaco Editor instance configured for BoxLang.
+
+**Parameters:**
+- `container` (HTMLElement): DOM element to host the editor
+- `options` (Object): Monaco Editor configuration options
+
+**Returns:** Monaco Editor instance
+
+```javascript
+import { createBoxLangEditor } from 'boxlang-monaco-editor';
+
+const editor = createBoxLangEditor(document.getElementById('editor'), {
+    value: 'component { function init() { return this; } }',
+    language: 'boxlang',
+    theme: 'boxlang-theme',
+    automaticLayout: true
+});
+```
+
+#### `getBoxLangLanguage()`
+Returns the registered BoxLang language configuration.
+
+```javascript
+import { getBoxLangLanguage } from 'boxlang-monaco-editor';
+const language = getBoxLangLanguage();
+```
+
+### Constants
+
+#### Language IDs
+- `BOXLANG_LANGUAGE_ID`: `'boxlang'` - For script files (.bx, .bxs)
+- `BOXLANG_TEMPLATE_LANGUAGE_ID`: `'boxlang-template'` - For template files (.bxm)
+
+#### File Extensions
+- `BOXLANG_EXTENSIONS`: `['.bx', '.bxs']` - BoxLang script file extensions
+- `BOXLANG_TEMPLATE_EXTENSIONS`: `['.bxm']` - BoxLang template file extensions
+
+#### MIME Types
+- `BOXLANG_MIME_TYPES`: `['text/x-boxlang']`
+- `BOXLANG_TEMPLATE_MIME_TYPES`: `['text/x-boxlang-template']`
+
+### Individual Components
+
+If you need more control, you can import and configure individual components:
+
+```javascript
+import { boxlangLanguageConfig } from 'boxlang-monaco-editor';
+import { boxlangMonarchTokens } from 'boxlang-monaco-editor';
+import { boxlangTheme } from 'boxlang-monaco-editor';
+
+// Manual setup
+monaco.languages.register({ id: 'boxlang' });
+monaco.languages.setLanguageConfiguration('boxlang', boxlangLanguageConfig);
+monaco.languages.setMonarchTokensProvider('boxlang', boxlangMonarchTokens.script);
+monaco.editor.defineTheme('boxlang-theme', boxlangTheme);
+```
+
 ## Development
 
 1. **Install dependencies**:
 
    ```bash
-   cd monaco
    npm install
    ```
 
@@ -74,14 +170,13 @@ const editor = createBoxLangEditor(document.getElementById('editor'), {
 
 ## File Structure
 
-```
-monaco/
+```text
+boxlang-monaco-editor/
 ├── src/
 │   ├── demo/
 │   │   ├── index.html          # Demo page
 │   │   └── index.js            # Demo application
-│   ├── index.js                # Library entry point
-│   ├── lib.js                  # Main library exports
+│   ├── index.js                # Main library entry point
 │   ├── boxlang-language-config.js   # Language configuration
 │   ├── boxlang-monarch-tokens.js    # Syntax tokenizer
 │   └── boxlang-theme.js        # Custom color theme
@@ -252,24 +347,99 @@ To add new BoxLang keywords:
 3. If it's a type keyword, also add it to `typeKeywords`
 4. Test the highlighting in the demo
 
-### Contributing
+## Troubleshooting
+
+### Common Issues
+
+**Q: Monaco Editor shows "Language 'boxlang' is not configured" error**
+
+A: Make sure you call `initializeBoxLangSupport()` before creating the editor:
+
+```javascript
+import { initializeBoxLangSupport } from 'boxlang-monaco-editor';
+initializeBoxLangSupport(); // Call this first
+// Then create your editor
+```
+
+**Q: Syntax highlighting doesn't work**
+
+A: Verify the language is set correctly when creating the editor:
+
+```javascript
+const editor = monaco.editor.create(container, {
+    value: 'your code',
+    language: 'boxlang', // For .bx/.bxs files
+    // OR
+    language: 'boxlang-template' // For .bxm files
+});
+```
+
+**Q: Custom theme not applied**
+
+A: Ensure the theme is set after initialization:
+
+```javascript
+initializeBoxLangSupport();
+monaco.editor.setTheme('boxlang-theme');
+```
+
+**Q: TypeScript errors when importing**
+
+A: The package includes TypeScript definitions. If you encounter issues, try:
+
+```typescript
+import type { BoxLangMonacoEditor } from 'boxlang-monaco-editor';
+// OR
+import * as BoxLangMonaco from 'boxlang-monaco-editor';
+```
+
+### Performance Tips
+
+- Use `automaticLayout: true` for responsive editors
+- Consider lazy loading for large applications
+- Use `tokenization.colorValidation: false` for better performance with many colors
+
+## Contributing
+
+We welcome contributions! Here's how you can help:
+
+### Reporting Issues
+
+- Use the [GitHub issue tracker](https://github.com/ortus-boxlang/boxlang-monaco-editor/issues)
+- Include a clear description and steps to reproduce
+- Provide code samples when possible
+- Mention your browser and Monaco Editor version
+
+### Development Setup
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/boxlang-monaco-editor.git`
+3. Install dependencies: `npm install`
+4. Start development server: `npm run dev`
+5. Make your changes
+6. Test thoroughly using the demo at `http://localhost:3000`
+7. Run linting: `npm run lint`
+8. Create a pull request
 
-## Browser Support
+### Areas for Contribution
 
-- Chrome 60+
-- Firefox 60+
-- Safari 12+
-- Edge 79+
+- **New Language Features**: Add support for additional BoxLang syntax
+- **Theme Improvements**: Enhance the color scheme or add new themes
+- **IntelliSense**: Expand autocompletion with more BoxLang functions
+- **Performance**: Optimize tokenization and parsing
+- **Documentation**: Improve examples and API documentation
+- **Testing**: Add unit tests and integration tests
+
+### Code Style
+
+- Follow the existing ESLint configuration
+- Use meaningful commit messages
+- Add JSDoc comments for new functions
+- Update README for new features
 
 ## License
 
-MIT License - see the TextMate bundle license for additional terms.
+Apache 2.0 - see the [LICENSE](LICENSE) file for details.
 
 ## Related Projects
 

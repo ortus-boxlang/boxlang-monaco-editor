@@ -5,7 +5,7 @@ import typescript from "@rollup/plugin-typescript";
 export default [
 	// ES Module build
 	{
-		input  : "src/lib.js",
+		input  : "src/index.js",
 		output : {
 			file      : "dist/index.esm.js",
 			format    : "es",
@@ -25,7 +25,7 @@ export default [
 
 	// CommonJS build
 	{
-		input  : "src/lib.js",
+		input  : "src/index.js",
 		output : {
 			file      : "dist/index.js",
 			format    : "cjs",
@@ -41,7 +41,7 @@ export default [
 
 	// UMD build for browser
 	{
-		input  : "src/lib.js",
+		input  : "src/index.js",
 		output : {
 			file      : "dist/index.umd.js",
 			format    : "umd",

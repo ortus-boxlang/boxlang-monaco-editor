@@ -1556,7 +1556,7 @@ const BOXLANG_MIME_TYPES = [ "text/x-boxlang" ];
 const BOXLANG_TEMPLATE_MIME_TYPES = [ "text/x-boxlang-template" ];
 
 // Default export for convenience
-var lib = {
+var index = {
 	initializeBoxLangSupport,
 	createBoxLangEditor,
 	getBoxLangLanguage,
@@ -1583,7 +1583,7 @@ exports.boxlangLanguageConfig = boxlangLanguageConfig$1;
 exports.boxlangMonarchTokens = boxlangMonarchTokens$1;
 exports.boxlangTheme = boxlangTheme$1;
 exports.createBoxLangEditor = createBoxLangEditor$1;
-exports.default = lib;
+exports.default = index;
 exports.getBoxLangLanguage = getBoxLangLanguage$1;
 exports.initializeBoxLangSupport = initializeBoxLangSupport$1;
 //# sourceMappingURL=index.js.map

@@ -18,7 +18,7 @@ async function runTests() {
 		"src/boxlang-monarch-tokens.js",
 		"src/boxlang-theme.js",
 		"src/index.js",
-		"src/lib.js",
+		"src/index.js",
 		"package.json",
 		"vite.config.js"
 	];

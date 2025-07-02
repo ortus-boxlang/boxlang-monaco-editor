@@ -1533,7 +1533,7 @@ const BOXLANG_MIME_TYPES = [ "text/x-boxlang" ];
 const BOXLANG_TEMPLATE_MIME_TYPES = [ "text/x-boxlang-template" ];
 
 // Default export for convenience
-var lib = {
+var index = {
 	initializeBoxLangSupport,
 	createBoxLangEditor,
 	getBoxLangLanguage,
@@ -1550,5 +1550,5 @@ var lib = {
 	}
 };
 
-export { BOXLANG_EXTENSIONS, BOXLANG_LANGUAGE_ID, BOXLANG_MIME_TYPES, BOXLANG_TEMPLATE_EXTENSIONS, BOXLANG_TEMPLATE_LANGUAGE_ID, BOXLANG_TEMPLATE_MIME_TYPES, boxlangLanguageConfig$1 as boxlangLanguageConfig, boxlangMonarchTokens$1 as boxlangMonarchTokens, boxlangTheme$1 as boxlangTheme, createBoxLangEditor$1 as createBoxLangEditor, lib as default, getBoxLangLanguage$1 as getBoxLangLanguage, initializeBoxLangSupport$1 as initializeBoxLangSupport };
+export { BOXLANG_EXTENSIONS, BOXLANG_LANGUAGE_ID, BOXLANG_MIME_TYPES, BOXLANG_TEMPLATE_EXTENSIONS, BOXLANG_TEMPLATE_LANGUAGE_ID, BOXLANG_TEMPLATE_MIME_TYPES, boxlangLanguageConfig$1 as boxlangLanguageConfig, boxlangMonarchTokens$1 as boxlangMonarchTokens, boxlangTheme$1 as boxlangTheme, createBoxLangEditor$1 as createBoxLangEditor, index as default, getBoxLangLanguage$1 as getBoxLangLanguage, initializeBoxLangSupport$1 as initializeBoxLangSupport };
 //# sourceMappingURL=index.esm.js.map
