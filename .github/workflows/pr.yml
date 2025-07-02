@@ -2,101 +2,36 @@ name: Pull Request CI
 
 on:
   pull_request:
-    branches: [development]
+    branches: [main]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [16, 18, 20]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests
-        run: npm test
-
-      - name: Run linting
-        run: npm run lint
-
-      - name: Build library
-        run: npm run build
-
-      - name: Check TypeScript types
-        run: npx tsc --noEmit || true
-
-      - name: Verify build artifacts
-        run: |
-          if [ ! -d "dist" ]; then
-            echo "❌ Build failed - dist directory not created"
-            exit 1
-          fi
-          if [ ! -f "dist/index.js" ]; then
-            echo "❌ Build failed - main file not created"
-            exit 1
-          fi
-          echo "✅ Build artifacts verified"
-
-  lint:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run linting
-        run: npm run lint
-
-  dependency-check:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Check for security vulnerabilities
-        run: npm audit --audit-level=moderate
-
-      - name: Check for outdated dependencies
-        run: npm outdated || true
+  tests:
+    uses: ./.github/workflows/tests.yml
+    with:
+      skip-dependency-check: false
 
   pr-summary:
-    needs: [test, lint, dependency-check]
+    needs: [tests]
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: always()
 
     steps:
-      - name: PR Success Summary
+      - name: PR Status Summary
         run: |
-          echo "✅ All checks passed!"
-          echo "📦 Tests completed successfully across Node.js versions 16, 18, and 20"
-          echo "🔍 Code quality checks passed"
-          echo "🔒 Security audit completed"
-          echo "🚀 Ready for review and merge"
+          echo "## Pull Request CI Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ needs.tests.result }}" == "success" ]; then
+            echo "✅ **All tests passed!**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "- 📦 Tests completed successfully across Node.js versions 16, 18, and 20" >> $GITHUB_STEP_SUMMARY
+            echo "- 🔍 Code quality checks passed" >> $GITHUB_STEP_SUMMARY
+            echo "- 🔒 Security audit completed" >> $GITHUB_STEP_SUMMARY
+            echo "- 🏗️ Build artifacts verified" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "🚀 **Ready for review and merge**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Tests failed**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Please check the test results and fix any issues before requesting review." >> $GITHUB_STEP_SUMMARY
+          fi

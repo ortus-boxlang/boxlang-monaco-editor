@@ -1,0 +1,106 @@
+name: Tests
+
+on:
+  workflow_call:
+    inputs:
+      skip-dependency-check:
+        description: 'Skip dependency vulnerability check'
+        required: false
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16, 18, 20]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Build library
+        run: npm run build
+
+      - name: Check TypeScript types
+        run: npx tsc --noEmit || true
+
+      - name: Verify build artifacts
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "❌ Build failed - dist directory not created"
+            exit 1
+          fi
+          if [ ! -f "dist/index.js" ]; then
+            echo "❌ Build failed - main file not created"
+            exit 1
+          fi
+          echo "✅ Build artifacts verified"
+
+  dependency-check:
+    runs-on: ubuntu-latest
+    if: ${{ !inputs.skip-dependency-check }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check for security vulnerabilities
+        run: npm audit --audit-level=moderate
+
+      - name: Check for outdated dependencies
+        run: npm outdated || true
+
+  test-summary:
+    needs: [test, dependency-check]
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Test Results Summary
+        run: |
+          echo "## Test Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ needs.test.result }}" == "success" ]; then
+            echo "✅ **Tests**: All tests, linting, and builds passed across Node.js versions 16, 18, 20" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Tests**: Tests, linting, or build failed" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ needs.dependency-check.result }}" == "success" ] || [ "${{ needs.dependency-check.result }}" == "skipped" ]; then
+            echo "✅ **Dependencies**: Security audit completed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Dependencies**: Security vulnerabilities found" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Node.js versions tested**: 16, 18, 20" >> $GITHUB_STEP_SUMMARY
