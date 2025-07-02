@@ -1423,6 +1423,37 @@ function registerBoxLangCompletions() {
 }
 
 /**
+ * Register context menu actions for BoxLang editors
+ *
+ * @param {monaco.editor.IStandaloneCodeEditor} editor - The editor instance
+ */
+function registerBoxLangContextMenu( editor ) {
+	// Add "Clear Editor" action
+	editor.addAction( {
+		id                 : "boxlang.clearEditor",
+		label              : "Clear Editor",
+		contextMenuGroupId : "boxlang",
+		contextMenuOrder   : 1.5,
+		run                : ( _editor ) => {
+			_editor.setValue( "" );
+			_editor.focus();
+		}
+	} );
+
+	// Add "Select All" action (alternative to Ctrl+A)
+	editor.addAction( {
+		id                 : "boxlang.selectAll",
+		label              : "Select All",
+		contextMenuGroupId : "boxlang",
+		contextMenuOrder   : 1.6,
+		keybindings        : [ monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyA ],
+		run                : ( _editor ) => {
+			_editor.setSelection( _editor.getModel().getFullModelRange() );
+		}
+	} );
+}
+
+/**
  * Create a BoxLang-enabled Monaco Editor instance
  *
  * @param {HTMLElement} container - The DOM element to mount the editor in
@@ -1466,8 +1497,14 @@ function createBoxLangEditor$1( container, options = {} ) {
 	// Merge options
 	const editorOptions = { ...defaultOptions, ...options };
 
-	// Create and return the editor
-	return monaco.editor.create( container, editorOptions );
+	// Create the editor
+	const editor = monaco.editor.create( container, editorOptions );
+
+	// Register context menu actions
+	registerBoxLangContextMenu( editor );
+
+	// Return the editor
+	return editor;
 }
 
 /**
@@ -1550,5 +1587,5 @@ var index = {
 	}
 };
 
-export { BOXLANG_EXTENSIONS, BOXLANG_LANGUAGE_ID, BOXLANG_MIME_TYPES, BOXLANG_TEMPLATE_EXTENSIONS, BOXLANG_TEMPLATE_LANGUAGE_ID, BOXLANG_TEMPLATE_MIME_TYPES, boxlangLanguageConfig$1 as boxlangLanguageConfig, boxlangMonarchTokens$1 as boxlangMonarchTokens, boxlangTheme$1 as boxlangTheme, createBoxLangEditor$1 as createBoxLangEditor, index as default, getBoxLangLanguage$1 as getBoxLangLanguage, initializeBoxLangSupport$1 as initializeBoxLangSupport };
+export { BOXLANG_EXTENSIONS, BOXLANG_LANGUAGE_ID, BOXLANG_MIME_TYPES, BOXLANG_TEMPLATE_EXTENSIONS, BOXLANG_TEMPLATE_LANGUAGE_ID, BOXLANG_TEMPLATE_MIME_TYPES, boxlangLanguageConfig$1 as boxlangLanguageConfig, boxlangMonarchTokens$1 as boxlangMonarchTokens, boxlangTheme$1 as boxlangTheme, createBoxLangEditor$1 as createBoxLangEditor, index as default, getBoxLangLanguage$1 as getBoxLangLanguage, initializeBoxLangSupport$1 as initializeBoxLangSupport, registerBoxLangContextMenu };
 //# sourceMappingURL=index.esm.js.map

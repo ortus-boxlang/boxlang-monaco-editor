@@ -14,7 +14,8 @@ export { boxlangTheme } from "./boxlang-theme";
 export {
 	initializeBoxLangSupport,
 	createBoxLangEditor,
-	getBoxLangLanguage
+	getBoxLangLanguage,
+	registerBoxLangContextMenu
 } from "./boxlang-monaco-integration";
 
 // Export language IDs as constants

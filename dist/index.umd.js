@@ -1446,6 +1446,37 @@
 	}
 
 	/**
+	 * Register context menu actions for BoxLang editors
+	 *
+	 * @param {monaco.editor.IStandaloneCodeEditor} editor - The editor instance
+	 */
+	function registerBoxLangContextMenu( editor ) {
+		// Add "Clear Editor" action
+		editor.addAction( {
+			id                 : "boxlang.clearEditor",
+			label              : "Clear Editor",
+			contextMenuGroupId : "boxlang",
+			contextMenuOrder   : 1.5,
+			run                : ( _editor ) => {
+				_editor.setValue( "" );
+				_editor.focus();
+			}
+		} );
+
+		// Add "Select All" action (alternative to Ctrl+A)
+		editor.addAction( {
+			id                 : "boxlang.selectAll",
+			label              : "Select All",
+			contextMenuGroupId : "boxlang",
+			contextMenuOrder   : 1.6,
+			keybindings        : [ monaco__namespace.KeyMod.CtrlCmd | monaco__namespace.KeyCode.KeyA ],
+			run                : ( _editor ) => {
+				_editor.setSelection( _editor.getModel().getFullModelRange() );
+			}
+		} );
+	}
+
+	/**
 	 * Create a BoxLang-enabled Monaco Editor instance
 	 *
 	 * @param {HTMLElement} container - The DOM element to mount the editor in
@@ -1489,8 +1520,14 @@
 		// Merge options
 		const editorOptions = { ...defaultOptions, ...options };
 
-		// Create and return the editor
-		return monaco__namespace.editor.create( container, editorOptions );
+		// Create the editor
+		const editor = monaco__namespace.editor.create( container, editorOptions );
+
+		// Register context menu actions
+		registerBoxLangContextMenu( editor );
+
+		// Return the editor
+		return editor;
 	}
 
 	/**
@@ -1586,6 +1623,7 @@
 	exports.default = index;
 	exports.getBoxLangLanguage = getBoxLangLanguage$1;
 	exports.initializeBoxLangSupport = initializeBoxLangSupport$1;
+	exports.registerBoxLangContextMenu = registerBoxLangContextMenu;
 
 	Object.defineProperty(exports, '__esModule', { value: true });
 

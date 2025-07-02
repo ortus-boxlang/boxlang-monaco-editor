@@ -324,6 +324,29 @@ const editor = monaco.editor.create( document.getElementById( "editor" ), {
 	}
 } );
 
+// Register context menu actions
+editor.addAction( {
+	id                 : "boxlang.clearEditor",
+	label              : "Clear Editor",
+	contextMenuGroupId : "boxlang",
+	contextMenuOrder   : 1.5,
+	run                : ( _editor ) => {
+		_editor.setValue( "" );
+		_editor.focus();
+	}
+} );
+
+editor.addAction( {
+	id                 : "boxlang.selectAll",
+	label              : "Select All",
+	contextMenuGroupId : "boxlang",
+	contextMenuOrder   : 1.6,
+	keybindings        : [ monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyA ],
+	run                : ( _editor ) => {
+		_editor.setSelection( _editor.getModel().getFullModelRange() );
+	}
+} );
+
 // File tab switching
 document.querySelectorAll( ".file-tab" ).forEach( tab => {
 	tab.addEventListener( "click", () => {
