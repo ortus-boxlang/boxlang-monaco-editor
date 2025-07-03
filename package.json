@@ -53,11 +53,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ortus-solutions/boxlang.tmbundle.git",
+    "url": "git+https://github.com/ortus-solutions/boxlang-monaco-editor.git",
     "directory": "monaco"
   },
   "bugs": {
-    "url": "https://github.com/ortus-solutions/boxlang.tmbundle/issues"
+    "url": "https://github.com/ortus-solutions/boxlang-monaco-editor/issues"
   },
   "homepage": "https://boxlang.io",
   "author": {
